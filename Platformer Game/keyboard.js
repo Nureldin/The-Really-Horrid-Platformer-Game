@@ -1,4 +1,5 @@
-var Keyboard = function () {
+var Keyboard = function ()
+{
 	var self = this;
 	
 	window.addEventListener('keydown', function(evt) { self.onKeyDown(evt); }, false);
