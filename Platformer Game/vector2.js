@@ -4,10 +4,10 @@ var Vector2 = function()
 	this.y = 0;
 }
 
-Vector2.prototype.set = function (x,y)
+Vector2.prototype.set = function ( _x, _y)
 {
-	this.x = x;
-	this.y = y;
+	this.x = _x;
+	this.y = _y;
 };
 
 Vector2.prototype.normalize = function ()
