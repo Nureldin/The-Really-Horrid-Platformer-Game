@@ -61,12 +61,12 @@ this.sprite.update(deltaTime);
 			{
 				this.sprite.setAnimation(ANIM_WALK_LEFT);
 			}
-		else if(this.jumping)
+			else if(this.jumping)
 			{
 				this.sprite.setAnimation(ANIM_JUMP_LEFT);
 			}
 		}
-		if (keyboard.isKeyDown(keyboard.KEY_RIGHT) == true) 
+		else if (keyboard.isKeyDown(keyboard.KEY_RIGHT) == true) 
 		{
 			right = true;
 			this.direction = RIGHT;
@@ -74,9 +74,9 @@ this.sprite.update(deltaTime);
 			{
 				this.sprite.setAnimation(ANIM_WALK_RIGHT);
 			}
-		else if (this.jumping)
+			else if (this.jumping)
 			{
-				this.sprite.setAnimation(ANIM_WALK_RIGHT);
+				this.sprite.setAnimation(ANIM_JUMP_RIGHT);
 			}
 		}
 		else
