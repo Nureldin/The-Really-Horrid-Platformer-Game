@@ -1,3 +1,7 @@
+var score = 0;
+var lives = 1;
+var heartImage = document.createElement("img")
+heartImage.src = "heartImage.png";
 var canvas = document.getElementById("gameCanvas");
 var context = canvas.getContext("2d");
 
@@ -175,6 +179,18 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
+	//score
+	context.fillStyle = "red";
+	context.font = "23px verdana";
+	var scoreText = "score: " + score + "%";
+	context.fillText(scoreText, SCREEN_WIDTH - 170, 35);
+	
+	//life counter
+	for (var i=0; i<lives; i++)
+	{
+		context.drawImage(heartImage, 80 + ((heartImage.width + 2) * i), 10);
+	}
+
 	draw_Map();
 	player.update(deltaTime);
 	player.draw();
