@@ -50,8 +50,6 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
-
-
 var LAYER_LADDERS = 1;
 var LAYER_PLATFORMS = 0;
 //var LAYER_BACKGROUND = 0;
@@ -77,6 +75,9 @@ var JUMP = METRE * 1500;			//(a large) instantaneous jump impulse
 
 var player = new Player();
 var keyboard = new Keyboard();
+
+var musicBackground;
+var sfxFire;
 
 function initialize()		//ANOTHER FUNCTION THAT IS MAGIC TO ME - don't argue with the magic, Nur!
 {
@@ -107,6 +108,25 @@ function initialize()		//ANOTHER FUNCTION THAT IS MAGIC TO ME - don't argue with
 			}
 		}
 	}
+musicBackground = new Howl(
+	{
+		urls: ["background.ogg"],
+		loop: true,
+		buffer: true,
+		volume: 0.5
+	} );
+musicBackground.play();
+
+sfxFire = new Howl(
+	{
+		urls: ["fireEffect.ogg"],
+		buffer: true,
+		volume: 1,
+		onend: function()
+		{
+			isSfxPlaying = false;
+		}
+	});
 }
 
 function cellAtPixelCoord(layer, x,y)
@@ -146,16 +166,36 @@ if(value > max)
 	return max;
 return value;
 }
-
+var worldOffsetX = 0;
 function draw_Map()
 {
+var startX = -1;
+var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
+var tileX = pixelToTile(player.position.x);
+var offsetX = TILE + Math.floor(player.position.x%TILE);
+
+startX = tileX - Math.floor(maxTiles / 2);
+
+	if (startX < -1)
+	{
+		startX = 0;
+		offsetX = 0;
+	}
+	if (startX  > MAP.tw - maxTiles)
+	{
+		startX = MAP.tw - maxTiles + 1;
+		offsetX = TILE;
+	}
+
+worldOffsetX = startX * TILE + offsetX;
+
 	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
 	{
-		var idx = 0;
-	
 		for( var y = 0; y < level1.layers[layerIdx].height; y++ )
 		{
-			for( var x = 0; x < level1.layers[layerIdx].width; x++ )
+			var idx = y * level1.layers[layerIdx].width + startX;
+			
+			for( var x = startX; x < startX + maxTiles; x++ )
 			{
 				if( level1.layers[layerIdx].data[idx] != 0 )
 				{
@@ -164,7 +204,7 @@ function draw_Map()
 					var tileIndex = level1.layers[layerIdx].data[idx] - 1;
 					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) * (TILESET_TILE + TILESET_SPACING);
 					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) * (TILESET_TILE + TILESET_SPACING);
-					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, x*TILE, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
+					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, (x - startX)*TILE - offsetX, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
 				}
 			idx++;
 			}
@@ -179,6 +219,10 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
+	player.update(deltaTime);
+	draw_Map();
+	player.draw();
+	
 	//score
 	context.fillStyle = "red";
 	context.font = "23px verdana";
@@ -188,12 +232,8 @@ function run()
 	//life counter
 	for (var i=0; i<lives; i++)
 	{
-		context.drawImage(heartImage, 80 + ((heartImage.width + 2) * i), 10);
+		context.drawImage(heartImage, 70 + ((heartImage.width + 2) * i), 10);
 	}
-
-	draw_Map();
-	player.update(deltaTime);
-	player.draw();
 		
 	// update the frame counter 
 	fpsTime += deltaTime;
