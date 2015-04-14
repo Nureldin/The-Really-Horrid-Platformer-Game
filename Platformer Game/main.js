@@ -1,3 +1,8 @@
+var ENEMY_MAXDX = METRE * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
+
+var enemies = [];
+
 var score = 0;
 var lives = 1;
 var heartImage = document.createElement("img")
@@ -9,31 +14,6 @@ var startFrameMillis = Date.now();
 var endFrameMillis = Date.now();
 
 var cells = [];		// the array that holds our simplified collision data
-
-// This function will return the time in seconds since the function 
-// was last called
-// You should only call this function once per frame
-function getDeltaTime()
-{
-	endFrameMillis = startFrameMillis;
-	startFrameMillis = Date.now();
-
-		// Find the delta time (dt) - the change in time since the last drawFrame
-		// We need to modify the delta time to something we can use.
-		// We want 1 to represent 1 second, so if the delta is in milliseconds
-		// we divide it by 1000 (or multiply by 0.001). This will make our 
-		// animations appear at the right speed, though we may need to use
-		// some large values to get objects movement and rotation correct
-	var deltaTime = (startFrameMillis - endFrameMillis) * 0.001;
-	
-		// validate that the delta is within range
-	if(deltaTime > 1)
-		deltaTime = 1;
-		
-	return deltaTime;
-}
-
-//-------------------- Don't modify anything above here ---------------------------------------------------------------------
 
 var SCREEN_WIDTH = canvas.width;
 var SCREEN_HEIGHT = canvas.height;
@@ -50,11 +30,15 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
-var LAYER_LADDERS = 1;
+var LAYER_HELP = 4;
+var LAYER_DEATH = 3;
+var LAYER_ENEMY = 2;
+var LAYER_BACKGROUND = 1;
 var LAYER_PLATFORMS = 0;
 //var LAYER_BACKGROUND = 0;
-var LAYER_COUNT = 2; //the number of layers in your map
-var MAP = { tw: 60, th: 15}; //equalled to the pixel height & pixel width of your map; use "resize map" to view its size
+var LAYER_COUNT = 3; //the number of layers in your map
+
+var MAP = { tw: 120, th: 15}; //equalled to the pixel height & pixel width of your map; use "resize map" to view its size
 var TILE = 35; //the width & height of 1 tile (in pixels); your tiles should be square
 var TILESET_TILE = TILE * 2; //because images are twice as big as the grid of our map
 var TILESET_PADDING = 2; //how many pixels between the image border & the tile images in the tilemap - I'm not too sure what this means...
@@ -79,7 +63,7 @@ var keyboard = new Keyboard();
 var musicBackground;
 var sfxFire;
 
-function initialize()		//ANOTHER FUNCTION THAT IS MAGIC TO ME - don't argue with the magic, Nur!
+function initialize()
 {
 	for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++)
 	{				// initialize the collision map
@@ -108,6 +92,20 @@ function initialize()		//ANOTHER FUNCTION THAT IS MAGIC TO ME - don't argue with
 			}
 		}
 	}
+	
+		for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
+		{
+			for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
+			{
+				if (level1.layers[LAYER_ENEMY].data[idx] != 0)
+				{
+					var enemy = new Enemy ();
+					enemy.position.set(tileToPixel(x),tileToPixel(y));
+					enemies.push (enemy);
+				}
+			}
+		}
+				
 musicBackground = new Howl(
 	{
 		urls: ["background.ogg"],
@@ -223,6 +221,15 @@ function run()
 	draw_Map();
 	player.draw();
 	
+	for (var i=0; i < enemies; i++)
+	{
+		enemies[i].update(deltaTime);
+	}
+	for (var i=0; i < enemies; i++)
+	{
+		enemies[i].draw();
+	}
+	
 	//score
 	context.fillStyle = "red";
 	context.font = "23px verdana";
@@ -253,7 +260,7 @@ function run()
 
 initialize();
 
-//-------------------- Don't modify anything below here
+//-------------------- Don't modify anything below here -------------------------------------------------------------
 //---cos it is magic and you DON'T mess with magic!!!!!
 
 
@@ -281,3 +288,27 @@ initialize();
 })();
 
 window.onEachFrame(run);
+
+
+// This function will return the time in seconds since the function 
+// was last called
+// You should only call this function once per frame
+function getDeltaTime()
+{
+	endFrameMillis = startFrameMillis;
+	startFrameMillis = Date.now();
+
+		// Find the delta time (dt) - the change in time since the last drawFrame
+		// We need to modify the delta time to something we can use.
+		// We want 1 to represent 1 second, so if the delta is in milliseconds
+		// we divide it by 1000 (or multiply by 0.001). This will make our 
+		// animations appear at the right speed, though we may need to use
+		// some large values to get objects movement and rotation correct
+	var deltaTime = (startFrameMillis - endFrameMillis) * 0.001;
+	
+		// validate that the delta is within range
+	if(deltaTime > 1)
+		deltaTime = 1;
+		
+	return deltaTime;
+}
