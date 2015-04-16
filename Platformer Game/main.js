@@ -1,8 +1,3 @@
-var ENEMY_MAXDX = METRE * 5;
-var ENEMY_ACCEL = ENEMY_MAXDX * 2;
-
-var enemies = [];
-
 var score = 0;
 var lives = 1;
 var heartImage = document.createElement("img")
@@ -35,8 +30,7 @@ var LAYER_DEATH = 3;
 var LAYER_ENEMY = 2;
 var LAYER_BACKGROUND = 1;
 var LAYER_PLATFORMS = 0;
-//var LAYER_BACKGROUND = 0;
-var LAYER_COUNT = 3; //the number of layers in your map
+var LAYER_COUNT = 5; 		//the number of layers in your map
 
 var MAP = { tw: 120, th: 15}; //equalled to the pixel height & pixel width of your map; use "resize map" to view its size
 var TILE = 35; //the width & height of 1 tile (in pixels); your tiles should be square
@@ -52,10 +46,16 @@ var tileset = document.createElement("img");
 var METRE = TILE;		//abitrary choice for 1 metre
 var GRAVITY = METRE * 9.8 * 6;		//very exaggerated gravity (x6)
 var MAXDX = METRE * 10;				//max horizontal speed (10 tiles per second)
-var MAXDY = METRE * 15;				//max vertical speed (15 tiles per second)
+var MAXDY = METRE * 20;				//max vertical speed (15 tiles per second)
 var ACCEL = MAXDX * 2;				//horizontal acceleration - take 1/2 second to reach "MAXDX"
 var FRICTION = MAXDX * 6;			//horizontal friction - take 1/6 second to stop from "MAXDX"
 var JUMP = METRE * 1500;			//(a large) instantaneous jump impulse
+
+var ENEMY_MAXDX = METRE * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
+
+var enemies = [];
+
 
 var player = new Player();
 var keyboard = new Keyboard();
@@ -93,7 +93,23 @@ function initialize()
 		}
 	}
 	
-		for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
+idx = 0;			//adds enemies
+for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
+	{
+	for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
+		{
+		if (level1.layers[LAYER_ENEMY].data[idx] != 0)
+			{
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Enemy(px, py);
+				enemies.push(e);
+			}
+		idx++;
+		}
+	}
+	
+		/*for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
 		{
 			for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
 			{
@@ -104,7 +120,7 @@ function initialize()
 					enemies.push (enemy);
 				}
 			}
-		}
+		}*/
 				
 musicBackground = new Howl(
 	{
@@ -197,8 +213,7 @@ worldOffsetX = startX * TILE + offsetX;
 			{
 				if( level1.layers[layerIdx].data[idx] != 0 )
 				{
-// the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile), so subtract one from the tileset id to get the
-// correct tile
+// the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile), so subtract one from the tileset id to get the correct tile
 					var tileIndex = level1.layers[layerIdx].data[idx] - 1;
 					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X) * (TILESET_TILE + TILESET_SPACING);
 					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y)) * (TILESET_TILE + TILESET_SPACING);
@@ -221,12 +236,13 @@ function run()
 	draw_Map();
 	player.draw();
 	
-	for (var i=0; i < enemies; i++)
+	for (var i=0; i < enemies.length; i++)
 	{
 		enemies[i].update(deltaTime);
 	}
-	for (var i=0; i < enemies; i++)
+	for (var i=0; i < enemies.length; i++)
 	{
+	//console.log("whatever");
 		enemies[i].draw();
 	}
 	

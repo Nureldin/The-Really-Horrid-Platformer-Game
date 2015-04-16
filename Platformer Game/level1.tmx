@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="15" tilewidth="35" tileheight="35" nextobjectid="1">
+ <tileset firstgid="1" name="Platforms" tilewidth="70" tileheight="70" spacing="2" margin="2">
+  <image source="C:/Users/nureldin.nasrullah/Documents/GitHub/The-Really-Horrid-Platformer-Game/Platformer Game/tileset.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="platforms" width="120" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt10EKgCAQhWEPFLX3BlY36Vzds42zCSEH80X1f5tHUCaOYxQCAAAAoDPmHBoTgI717fToLAB49OhbvsU+++l6zmnrtxSeqbkH32V1r+lb2yt/2SObcDz1GeetZeo1ETSJoveo/5PXnOkl2asOqvrGi7zbAZS/ECc=
+  </data>
+ </layer>
+ <layer name="background" width="120" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzjERACAMALHKQAHmcIB69u60B5csv34EP5vdA4VGKrxudQ8U2qkAAAAAANxzALeaAbY=
+  </data>
+ </layer>
+ <layer name="enemy spawns" width="120" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1DERAAAIxLD3bwlzKGDkGEgUdGoCAAAAwEd1HQCwyOMAZg0x6QF3
+  </data>
+ </layer>
+ <layer name="auto-death" width="120" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzbENACAMA7D+fwgncAGHMbGiDi0LthRlSyIAAAAAAIBjFTd/mM1NzihM1+7t55UNJMArbQ==
+  </data>
+ </layer>
+ <layer name="help layer" width="120" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6D1T2Q8W8xDSEACAAA0zXUAAAAAeG0BDPQAuQ==
+  </data>
+ </layer>
+</map>

@@ -26,7 +26,7 @@ this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [79, 80, 81, 82, 83, 84, 85, 8
 
 for (var i=0; i < ANIM_MAX; i++)
 {
-	this.sprite.setAnimationOffset(i, -55, -87);
+	this.sprite.setAnimationOffset(i, -75, -87);
 }
 
 this.position = new Vector2();
