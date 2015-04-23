@@ -1,5 +1,5 @@
 var LEFT = 0;
-var RIGHT = 0;
+var RIGHT = 1;
 
 var ANIM_IDLE_LEFT = 0;
 var ANIM_JUMP_LEFT = 1;
@@ -26,7 +26,7 @@ this.sprite.buildAnimation(12, 8, 165, 126, 0.05, [79, 80, 81, 82, 83, 84, 85, 8
 
 for (var i=0; i < ANIM_MAX; i++)
 {
-	this.sprite.setAnimationOffset(i, -75, -87);
+	this.sprite.setAnimationOffset(i, -55, -87);
 }
 
 this.position = new Vector2();
@@ -43,6 +43,8 @@ this.jumping = false;
 this.direction = LEFT;
 
 this.cooldownTimer = 0;
+
+this.isDead = false;
 };
 
 Player.prototype.update = function(deltaTime)
@@ -109,7 +111,7 @@ this.sprite.update(deltaTime);
 	{
 	sfxFire.play();
 	this.cooldownTimer = 0.3;
-	//shoot a bullet
+	bullets.push(new bullet(this.position.x, this.position.y, this.direction));
 	}
 	
 	var wasleft = this.velocity.x < 0;

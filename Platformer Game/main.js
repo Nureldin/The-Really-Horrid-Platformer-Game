@@ -1,3 +1,7 @@
+var bullets = [];
+var enemies = [];
+var cells = [];		// the array that holds our simplified collision data
+
 var score = 0;
 var lives = 1;
 var heartImage = document.createElement("img")
@@ -7,8 +11,6 @@ var context = canvas.getContext("2d");
 
 var startFrameMillis = Date.now();
 var endFrameMillis = Date.now();
-
-var cells = [];		// the array that holds our simplified collision data
 
 var SCREEN_WIDTH = canvas.width;
 var SCREEN_HEIGHT = canvas.height;
@@ -54,14 +56,23 @@ var JUMP = METRE * 1500;			//(a large) instantaneous jump impulse
 var ENEMY_MAXDX = METRE * 5;
 var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 
-var enemies = [];
-
-
 var player = new Player();
 var keyboard = new Keyboard();
 
 var musicBackground;
 var sfxFire;
+
+function intersects(x1, y1, w1, h1, x2, y2, w2, h2)
+{
+if(y2 + h2 < y1 ||
+x2 + w2 < x1 ||
+x2 > x1 + w1 ||
+y2 > y1 + h1)
+{
+	return false;
+}
+return true;
+}
 
 function initialize()
 {
@@ -180,6 +191,7 @@ if(value > max)
 	return max;
 return value;
 }
+
 var worldOffsetX = 0;
 function draw_Map()
 {
@@ -227,23 +239,76 @@ worldOffsetX = startX * TILE + offsetX;
 
 function run()
 {
+console.log(player.position.x + ", " + player.position.y);
 	context.fillStyle = "#ccc";		
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
-	
-	player.update(deltaTime);
 	draw_Map();
+		
+	if (player.isDead == false)
+	{
 	player.draw();
+	player.update(deltaTime);
+	}
 	
+	//drawing & updating enemies
 	for (var i=0; i < enemies.length; i++)
 	{
 		enemies[i].update(deltaTime);
+		if (player.isDead == false)
+		{
+			if (intersects(enemies[i].position.x, enemies[i].position.y, TILE, TILE,
+							player.position.x, player.position.y, player.width, player.height) == true)
+			{
+				//lives -= 1;
+				//if (lives = 0)
+				player.isDead = true;
+			}
+		}
 	}
 	for (var i=0; i < enemies.length; i++)
 	{
 	//console.log("whatever");
 		enemies[i].draw();
+	}
+	
+	//drawing & updating bullets
+	var hit = false;
+	for (var i = 0; i < bullets.length; i++)
+	{
+		bullets[i].update(deltaTime);
+	}
+	
+	for (var i = 0; i < bullets.length; i++)
+	{
+		if (bullets[i].position.x - worldOffsetX < 0 ||
+			bullets[i].position.x - worldOffsetX > SCREEN_WIDTH)
+		{
+			hit = true;
+		}
+		
+		for (var j = 0; j < enemies.length; j++)
+		{
+			if (intersects (bullets[i].position.x, bullets[i].position.y, TILE, TILE,
+				enemies[j].position.x, enemies[j].position.y, TILE, TILE) == true)
+			{
+				//kill both bullet & enemy
+				enemies.splice(j,1);
+				hit = true;
+				score += 5;
+				break;
+			}
+		}
+		if (hit == true)
+		{
+			bullets.splice(i, 1);
+			break;
+		}
+	}		
+	for (var i=0; i < bullets.length; i++)
+	{
+		bullets[i].draw();
 	}
 	
 	//score
@@ -272,6 +337,7 @@ function run()
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 20, 100);
+	
 }
 
 initialize();
