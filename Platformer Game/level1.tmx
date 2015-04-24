@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="15" tilewidth="35" tileheight="35" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="1000" height="15" tilewidth="35" tileheight="35" nextobjectid="1">
  <tileset firstgid="1" name="Platforms" tilewidth="70" tileheight="70" spacing="2" margin="2">
   <image source="C:/Users/nureldin.nasrullah/Documents/GitHub/The-Really-Horrid-Platformer-Game/Platformer Game/tileset.png" width="1024" height="1024"/>
  </tileset>
- <layer name="platforms" width="120" height="15">
+ <layer name="platforms" width="1000" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt10EKgCAQhWEPFLX3BlY36Vzds42zCSEH80X1f5tHUCaOYxQCAAAAoDPmHBoTgI717fToLAB49OhbvsU+++l6zmnrtxSeqbkH32V1r+lb2yt/2SObcDz1GeetZeo1ETSJoveo/5PXnOkl2asOqvrGi7zbAZS/ECc=
+   eJzt3UsOQDAUBVALEuZ24LMT67JPk3YiEkTa+pwzuZEond48jaoCAAAAAAAAAAAAAAAAAAAAAAAAgOdrQtY3EwAAAAAAAADeKM7N26K7AAAAAAAAAIAyUszNnUUHAADgi5bN9RAy9t9xZ82ZewAAAICyYm8/MzePXV/HBwAA4EnmjM/L/Y341S7ep9oIAAAA/ECX6T3+kw4AAMCeKWT/kkzVo3P18+4gAQAA+KcVva8QJw==
   </data>
  </layer>
- <layer name="background" width="120" height="15">
+ <layer name="background" width="1000" height="15">
   <data encoding="base64" compression="zlib">
-   eJztzjERACAMALHKQAHmcIB69u60B5csv34EP5vdA4VGKrxudQ8U2qkAAAAAANxzALeaAbY=
+   eJztziEBACAMAMHFIAHlaEB6FGbzm7kzbz8CAAAAmLanBxqtVAAAAAAAAAD4zvRAo5sKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQPUAfPYBtg==
   </data>
  </layer>
- <layer name="enemy spawns" width="120" height="15">
+ <layer name="auto-death" width="1000" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt1DERAAAIxLD3bwlzKGDkGEgUdGoCAAAAwEd1HQCwyOMAZg0x6QF3
+   eJztzbENACAMA7D+fwgncEEPY2ViaiVAthRlSyIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4H1Z3AAAAMA9ZnMDAADAT0ZhunZPPwAAALBbEEIrbQ==
   </data>
  </layer>
- <layer name="auto-death" width="120" height="15">
+ <layer name="the end" width="1000" height="15">
   <data encoding="base64" compression="zlib">
-   eJztzbENACAMA7D+fwgncAGHMbGiDi0LthRlSyIAAAAAAIBjFTd/mM1NzihM1+7t55UNJMArbQ==
+   eJztzjEBAAAIA6D1r2FR7yXwEBKQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALS5DgAAAAAAAAAAAAAAAAAAAO8tvpEApA==
   </data>
  </layer>
- <layer name="help layer" width="120" height="15">
+ <layer name="trigger death" width="1000" height="15">
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAIA6D1T2Q8W8xDSEACAAA0zXUAAAAAeG0BDPQAuQ==
+   eJzt2DERAAAIA7H614Q4LHAHA0OyvIY2AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAvTouAAAA8Mf17vcDAAAAMNH+ghAp
+  </data>
+ </layer>
+ <layer name="enemy spawns" width="1000" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt2kEJAAAIBMHrX8lyvmwgiDCTYANsAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwW10HAAAAAAAAAAAAAACwxiMOAAAAAAAAAAAAAMBoar4Bdw==
+  </data>
+ </layer>
+ <layer name="help layer" width="1000" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzgEJAAAIA7D3T2Q8SxwE2RIsAQAAAAAAAAAAAAAAAAAAAAAAAAAAAACgZa4DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDEAtJrALk=
   </data>
  </layer>
 </map>

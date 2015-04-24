@@ -35,15 +35,16 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
-var LAYER_HELP = 4;
-var LAYER_DEATH = 3;
-var LAYER_ENEMY = 2;
-var LAYER_BACKGROUND = 1;
+var LAYER_COUNT = 4;	//the number of layers in your map
 var LAYER_PLATFORMS = 0;
-var LAYER_COUNT = 5; 		//the number of layers in your map
-//var LAYER_TRIGGERS = 5;
+var LAYER_BACKGROUND = 1;
+var LAYER_DEATH = 2;
+var LAYER_END = 3;
+var LAYER_TRIGGERS = 4;
+var LAYER_ENEMY = 5;
+var LAYER_HELP = 6;
 
-var MAP = { tw: 120, th: 15}; //equalled to the pixel height & pixel width of your map; use "resize map" to view its size
+var MAP = { tw: 1000, th: 15}; //equalled to the pixel height & pixel width of your map; use "resize map" to view its size
 var TILE = 35; //the width & height of 1 tile (in pixels); your tiles should be square
 var TILESET_TILE = TILE * 2; //because images are twice as big as the grid of our map
 var TILESET_PADDING = 2; //how many pixels between the image border & the tile images in the tilemap - I'm not too sure what this means...
@@ -73,7 +74,7 @@ var sfxFire;
 
 var worldOffsetX = 0;
 
-var splashTimer = 3;
+var splashTimer = 1;
 function runSplash()
 {
 	splashTimer -= deltaTime;
@@ -110,6 +111,7 @@ function runSplash()
 
 function runGame()
 {
+	//console.log("run");
 	draw_Map();
 	
 if (player.isDead == false)
@@ -117,7 +119,7 @@ if (player.isDead == false)
 	player.draw();
 	player.update(deltaTime);
 	}
-else if (player.isDead == true)
+else
 	{
 		gameState = STATE_YOUDIE
 		return;
@@ -128,15 +130,27 @@ bulletStuff();
 hudStuff();
 frameStuff();
 
-console.log(player.isDead);
+console.log("Is your player dead? " + player.isDead);
+}
+
+function runFinish()
+{
+	musicBackground.mute();
+	console.log("YOU WIN!!!!!!!!");
 }
 
 function runGameover()
 {	
+	musicBackground.mute();
 	context.fillStyle = "#000";
 	context.font="24px Arial";
 	context.fillText("Game Over Dude", SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2);
 	context.fillText("Your score was... "+ score + "%", SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 50);
+
+	if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true && player.isDead == true)
+	{
+		restart();
+	}
 }
 
 function intersects(x1, y1, w1, h1, x2, y2, w2, h2)
@@ -181,57 +195,43 @@ function initialize()
 		}
 	}
 
-/*cells[LAYER_TRIGGERS] = [];						//code for LAYER_TRIGGERS
+cells[LAYER_TRIGGERS] = [];						//initialize LAYER_TRIGGERS in collision map
 var idx = 0;
 for (var y = 0; y < level1.layers[LAYER_TRIGGERS].height; y++)
-	{
+{
 	cells[LAYER_TRIGGERS][y] = [];
 	for (var x = 0; x < level1.layers[LAYER_TRIGGERS].width; x++)
-		{
-		if (Level1.layers[LAYER_TRIGGERS].data[idx] != 0)
-			{
-				cells[LAYER_TRIGGERS][y][x] = 1;
-				cells[LAYER_TRIGGERS][y-1][x] = 1;
-				cells[LAYER_TRIGGERS][y-1][x+1] = 1;
-				cells[LAYER_TRIGGERS][y][x+1] = 1;
-			}
-		else if (cells[LAYER_TRIGGERS][y][x] != 1)
-			{
-				cells[LAYER_TRIGGERS][y][x] = 0;			//setting value to 0 if haven't done so before now
-			}
-		idx++;
-		}
-	}
-*/
-
-idx = 0;			//adds enemies
-for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
 	{
-	for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
+		if (level1.layers[LAYER_TRIGGERS].data[idx] != 0)
 		{
-		if (level1.layers[LAYER_ENEMY].data[idx] != 0)
+			cells[LAYER_TRIGGERS][y][x] = 1;
+			cells[LAYER_TRIGGERS][y-1][x] = 1;
+			cells[LAYER_TRIGGERS][y-1][x+1] = 1;
+			cells[LAYER_TRIGGERS][y][x+1] = 1;
+		}
+		else if (cells[LAYER_TRIGGERS][y][x] != 1)
+		{
+			cells[LAYER_TRIGGERS][y][x] = 0;			//setting value to 0 if haven't done so before now
+		}
+		idx++;
+	}
+}
+
+	idx = 0;			//adds enemies
+	for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
+	{
+		for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
+		{
+			if (level1.layers[LAYER_ENEMY].data[idx] != 0)
 			{
 				var px = tileToPixel(x);
 				var py = tileToPixel(y);
 				var e = new Enemy(px, py);
 				enemies.push(e);
 			}
-		idx++;
+			idx++;
 		}
 	}
-	
-		/*for (var x = 0; x < level1.layers[LAYER_ENEMY].width; x++)
-		{
-			for (var y = 0; y < level1.layers[LAYER_ENEMY].height; y++)
-			{
-				if (level1.layers[LAYER_ENEMY].data[idx] != 0)
-				{
-					var enemy = new Enemy ();
-					enemy.position.set(tileToPixel(x),tileToPixel(y));
-					enemies.push (enemy);
-				}
-			}
-		}*/
 				
 musicBackground = new Howl(
 	{
@@ -435,11 +435,10 @@ context.font="14px Arial";
 context.fillText("FPS: " + fps, 5, 20, 100);
 }
 
-/*function restart()
+function restart()
 {
-	run();
+	gameState = STATE_SPLASH;
 }
-*/
 
 function run()
 {
@@ -460,16 +459,13 @@ switch(gameState)
 	case STATE_YOUDIE:
 				runGameover();
 				break;
+	case STATE_LvWIN:
+				runFinish();
+				break;
 	}
 }
 
 initialize();
-
-/*if (keyboard.isKeyDown(keyboard.KEY_SPACE) == true && player.isDead == true)
-	{
-		restart();
-	}
-*/
 
 //-------------------- Don't modify anything below here -------------------------------------------------------------
 //---cos it is magic and you DON'T mess with magic!!!!!

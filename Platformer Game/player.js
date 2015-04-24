@@ -207,13 +207,18 @@ var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
 			}
 		}
 	}
-	
-/*if (cellAtTileCoord(LAYER_TRIGGERS, tx, ty) == true)		//"triggers" layer code
-	{
-	console.log("game over man, game over!")
-	}
-*/
 
+	if (player.position.y > 500)					//falling to your death
+	{
+		player.isDead = true;
+		console.log("you fell to death!");
+	}
+
+	if (cellAtTileCoord(LAYER_TRIGGERS, tx, ty) == true)		//"triggers" layer code
+	{
+	player.isDead = true;
+	console.log("game over man, game over!");
+	}
 }
 
 Player.prototype.draw = function()
